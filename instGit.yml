@@ -1,0 +1,29 @@
+- hosts: localhost
+  tasks:
+  - name: inst git
+    yum: name=git state=latest
+    become: yes
+    become_method: sudo
+  - name: clone
+    git:
+      repo: https://github.com/ruthrabin/devops.git
+      dest: files
+      clone: yes
+  - name: clone Pet
+    git:
+      repo: https://github.com/ruthrabin/spring-petclinic.git
+      dest: pets
+      clone: yes
+  - name: install docker
+    yum: name=docker state=latest
+    become: yes
+    become_method: sudo
+  - name: add group
+    user: append=yes groups=docker  name=ec2-user
+    sudo: true
+  - name: run docker
+    service: name=docker state=started
+    become: yes
+    become_method: sudo
+        
+
